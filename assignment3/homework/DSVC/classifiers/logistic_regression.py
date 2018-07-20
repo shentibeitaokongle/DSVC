@@ -15,7 +15,6 @@ class LogisticRegression(object):
         """
         Compute the loss function and its derivative.
         Subclasses will override this.
-
         Inputs:
         - X_batch: A numpy array of shape (N, D) containing a minibatch of N
         data points; each point has dimension D.
@@ -30,19 +29,17 @@ class LogisticRegression(object):
         # TODO:                                                                 #
         # calculate the loss and the derivative                                 #
         #########################################################################
-        loss = -np.sum((y_batch * np.log(self.sigmoid(X_batch.dot(self.w)))) +
-                       (1 - y_batch) * np.log(1 - self.sigmoid(X_batch.dot(self.w)))) / len(y_batch)
+        loss = np.sum((y_batch * np.log(self.sigmoid(X_batch.dot(self.w)))) +
+                      (1 - y_batch) * np.log(1 - self.sigmoid(X_batch.dot(self.w)))) / len(y_batch)
         gradient = np.empty(len(self.w))
-        gradient[-1] = np.sum(self.sigmoid(X_batch.dot(self.w)) - y_batch)
-        for i in range(1, len(self.w)):
-            gradient[i] = self.sigmoid(X_batch.dot(self.w) - y_batch).dot(X_batch[:, i])
-        return (loss, gradient / len(y_batch))
+        gradient[-1] = np.sum(y_batch - self.sigmoid(X_batch.dot(self.w)))
+        for i in range(0, len(self.w) - 1):
+            gradient[i] = (y_batch - self.sigmoid(X_batch.dot(self.w))).dot(X_batch[:, i])
+        # gradient = X_batch.T.dot(self.sigmoid(X_batch.dot(self.w)) - y_batch) / len(X_batch)
+        return -loss, -gradient / len(X_batch)
         #########################################################################
         #                       END OF YOUR CODE                                #
         #########################################################################
-
-    def test(self, X):
-        self.w = 0.001 * np.random.randn(X.shape)
 
     def train(self, X, y, learning_rate=1e-3, num_iters=1000,
               batch_size=200, verbose=True):
@@ -68,47 +65,43 @@ class LogisticRegression(object):
 
         loss_history = []
 
-        for i in range(num_iters):
-            loss, gradient = self.loss(X, y)
-            self.w = self.w - learning_rate * gradient
+        for it in range(num_iters):
+            X_batch = None
+            y_batch = None
+
+            #########################################################################
+            # TODO:                                                                 #
+            # Sample batch_size elements from the training data and their           #
+            # corresponding labels to use in this round of gradient descent.        #
+            # Store the data in X_batch and their corresponding labels in           #
+            # y_batch; after sampling X_batch should have shape (batch_size, dim)   #
+            # and y_batch should have shape (batch_size,)                           #
+            #                                                                       #
+            # Hint: Use np.random.choice to generate indices. Sampling with         #
+            # replacement is faster than sampling without replacement.              #
+            #########################################################################
+            batch_index = np.random.choice(num_train, batch_size, False)
+            X_batch = X[batch_index]
+            y_batch = y[batch_index]
+            #########################################################################
+            #                       END OF YOUR CODE                                #
+            #########################################################################
+
+            # evaluate loss and gradient
+            loss, grad = self.loss(X_batch, y_batch)
             loss_history.append(loss)
-
-            # for it in range(num_iters):
-            #     X_batch = None
-            #     y_batch = None
-            #
-            #     #########################################################################
-            #     # TODO:                                                                 #
-            #     # Sample batch_size elements from the training data and their           #
-            #     # corresponding labels to use in this round of gradient descent.        #
-            #     # Store the data in X_batch and their corresponding labels in           #
-            #     # y_batch; after sampling X_batch should have shape (batch_size, dim)   #
-            #     # and y_batch should have shape (batch_size,)                           #
-            #     #                                                                       #
-            #     # Hint: Use np.random.choice to generate indices. Sampling with         #
-            #     # replacement is faster than sampling without replacement.              #
-            #     #########################################################################
-            #     pass
-            #     #########################################################################
-            #     #                       END OF YOUR CODE                                #
-            #     #########################################################################
-            #
-            #     # evaluate loss and gradient
-            #     loss, grad = self.loss(X_batch, y_batch)
-            #     loss_history.append(loss)
-
             # perform parameter update
             #########################################################################
             # TODO:                                                                 #
             # Update the weights using the gradient and the learning rate.          #
             #########################################################################
-            # pass
+            self.w = self.w - learning_rate * grad
             #########################################################################
             #                       END OF YOUR CODE                                #
             #########################################################################
 
-            if verbose and i % 100 == 0:
-                print('iteration %d / %d: loss %f' % (i, num_iters, loss))
+            if verbose and it % 100 == 0:
+                print('iteration %d / %d: loss %f' % (it, num_iters, loss))
 
         return loss_history
 
@@ -130,7 +123,8 @@ class LogisticRegression(object):
         # TODO:                                                                   #
         # Implement this method. Store the predicted labels in y_pred.            #
         ###########################################################################
-        pass
+        temp = self.sigmoid(X.dot(self.w)) + 0.5
+        y_pred = temp.astype(int)
         ###########################################################################
         #                           END OF YOUR CODE                              #
         ###########################################################################

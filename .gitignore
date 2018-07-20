@@ -2,7 +2,7 @@
 .ipynb_checkpoints
 stuff
 *.pyc
-.idea 
+.idea/*
 
 
 assignment6/*
