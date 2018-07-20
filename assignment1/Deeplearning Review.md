@@ -22,6 +22,23 @@
 
 * the aim of researchers has been to replace hand-engineered features with trainable multilayer networks,but despite its simplicity,the solution was not widely understood until the mid 1980s.As it turns out,multilayer architectures can be trained by simple stochastic gradient descent.        
 * chain rule for derivatives       
+* once these gradients(对目标函数) have been computed, it is straightforward to compute the gradients(目标函数对每个权值) with respect to the weights of each moudule
+* feedforward neural network architectures       
+* non-linear function   
+* rectified linear unit(ReLU)     
+* units that are not in the input or output layer are conventionally called hidden units      
+* local minima   
+* saddle points where the gradient is zero       
+* CIFAR introduced unsupervised learning procedures that could   
+* overfitting    
+* full connectivity between adjacent layers      
+* convolutional neural network(ConvNet)     
+
+
+### Convolutional neural networks      
+
 * 
+
+
 
 

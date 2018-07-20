@@ -30,13 +30,21 @@ class LogisticRegression(object):
         # TODO:                                                                 #
         # calculate the loss and the derivative                                 #
         #########################################################################
-        return np.sum((y_batch * np.exp(self.sigmoid(X_batch.dot(self.w)))) +
-                      (1 - y_batch) * np.exp(1 - self.sigmoid(X_batch.dot(self.w)))) / len(y_batch)
+        loss = -np.sum((y_batch * np.log(self.sigmoid(X_batch.dot(self.w)))) +
+                       (1 - y_batch) * np.log(1 - self.sigmoid(X_batch.dot(self.w)))) / len(y_batch)
+        gradient = np.empty(len(self.w))
+        gradient[-1] = np.sum(self.sigmoid(X_batch.dot(self.w)) - y_batch)
+        for i in range(1, len(self.w)):
+            gradient[i] = self.sigmoid(X_batch.dot(self.w) - y_batch).dot(X_batch[:, i])
+        return (loss, gradient / len(y_batch))
         #########################################################################
         #                       END OF YOUR CODE                                #
         #########################################################################
 
-    def train(self, X, y, learning_rate=1e-3, num_iters=100,
+    def test(self, X):
+        self.w = 0.001 * np.random.randn(X.shape)
+
+    def train(self, X, y, learning_rate=1e-3, num_iters=1000,
               batch_size=200, verbose=True):
 
         """
@@ -47,7 +55,7 @@ class LogisticRegression(object):
         - y: A numpy array of shape (N,) containing training labels;
         - learning_rate: (float) learning rate for optimization.
         - num_iters: (integer) number of steps to take when optimizing
-        - batch_size: (integer) numb    er of training examples to use at each step.
+        - batch_size: (integer) number of training examples to use at each step.
         - verbose: (boolean) If true, print progress during optimization.
 
         Outputs:
@@ -60,42 +68,47 @@ class LogisticRegression(object):
 
         loss_history = []
 
-        for it in range(num_iters):
-            X_batch = None
-            y_batch = None
-
-            #########################################################################
-            # TODO:                                                                 #
-            # Sample batch_size elements from the training data and their           #
-            # corresponding labels to use in this round of gradient descent.        #
-            # Store the data in X_batch and their corresponding labels in           #
-            # y_batch; after sampling X_batch should have shape (batch_size, dim)   #
-            # and y_batch should have shape (batch_size,)                           #
-            #                                                                       #
-            # Hint: Use np.random.choice to generate indices. Sampling with         #
-            # replacement is faster than sampling without replacement.              #
-            #########################################################################
-            pass
-            #########################################################################
-            #                       END OF YOUR CODE                                #
-            #########################################################################
-
-            # evaluate loss and gradient
-            loss, grad = self.loss(X_batch, y_batch)
+        for i in range(num_iters):
+            loss, gradient = self.loss(X, y)
+            self.w = self.w - learning_rate * gradient
             loss_history.append(loss)
+
+            # for it in range(num_iters):
+            #     X_batch = None
+            #     y_batch = None
+            #
+            #     #########################################################################
+            #     # TODO:                                                                 #
+            #     # Sample batch_size elements from the training data and their           #
+            #     # corresponding labels to use in this round of gradient descent.        #
+            #     # Store the data in X_batch and their corresponding labels in           #
+            #     # y_batch; after sampling X_batch should have shape (batch_size, dim)   #
+            #     # and y_batch should have shape (batch_size,)                           #
+            #     #                                                                       #
+            #     # Hint: Use np.random.choice to generate indices. Sampling with         #
+            #     # replacement is faster than sampling without replacement.              #
+            #     #########################################################################
+            #     pass
+            #     #########################################################################
+            #     #                       END OF YOUR CODE                                #
+            #     #########################################################################
+            #
+            #     # evaluate loss and gradient
+            #     loss, grad = self.loss(X_batch, y_batch)
+            #     loss_history.append(loss)
 
             # perform parameter update
             #########################################################################
             # TODO:                                                                 #
             # Update the weights using the gradient and the learning rate.          #
             #########################################################################
-            pass
+            # pass
             #########################################################################
             #                       END OF YOUR CODE                                #
             #########################################################################
 
-            if verbose and it % 100 == 0:
-                print('iteration %d / %d: loss %f' % (it, num_iters, loss))
+            if verbose and i % 100 == 0:
+                print('iteration %d / %d: loss %f' % (i, num_iters, loss))
 
         return loss_history
 
