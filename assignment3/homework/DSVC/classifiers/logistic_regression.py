@@ -7,11 +7,12 @@ class LogisticRegression(object):
 
     def __init__(self):
         self.w = None
+        self.ws = None
 
     def sigmoid(self, t):
         return 1. / (1. + np.exp(-t))
 
-    def loss(self, X_batch, y_batch):
+    def loss(self, X_batch, y_batch, it):
         """
         Compute the loss function and its derivative.
         Subclasses will override this.
@@ -29,14 +30,16 @@ class LogisticRegression(object):
         # TODO:                                                                 #
         # calculate the loss and the derivative                                 #
         #########################################################################
-        loss = np.sum((y_batch * np.log(self.sigmoid(X_batch.dot(self.w)))) +
-                      (1 - y_batch) * np.log(1 - self.sigmoid(X_batch.dot(self.w)))) / len(y_batch)
-        gradient = np.empty(len(self.w))
-        gradient[-1] = np.sum(y_batch - self.sigmoid(X_batch.dot(self.w)))
-        for i in range(0, len(self.w) - 1):
-            gradient[i] = (y_batch - self.sigmoid(X_batch.dot(self.w))).dot(X_batch[:, i])
-        # gradient = X_batch.T.dot(self.sigmoid(X_batch.dot(self.w)) - y_batch) / len(X_batch)
-        return -loss, -gradient / len(X_batch)
+
+        loss = np.sum((y_batch * np.log(self.sigmoid(X_batch.dot(self.ws[:, it])))) +
+                      (1 - y_batch) *
+                      np.log(1 - self.sigmoid(X_batch.dot(self.ws[:, it])))) - 0.005 * np.sum(np.square(self.ws[:, it]))
+        gradient = np.empty(len(self.ws[:, it]))
+        # 偏置项位于样本特征的最后一列
+        gradient[-1] = np.sum(y_batch - self.sigmoid(X_batch.dot(self.ws[:, it])))
+        for i in range(0, len(self.ws[:, it]) - 1):
+            gradient[i] = (y_batch - self.sigmoid(X_batch.dot(self.ws[:, it]))).dot(X_batch[:, i])
+        return -loss / len(y_batch), - gradient / len(X_batch)
         #########################################################################
         #                       END OF YOUR CODE                                #
         #########################################################################
@@ -123,8 +126,8 @@ class LogisticRegression(object):
         # TODO:                                                                   #
         # Implement this method. Store the predicted labels in y_pred.            #
         ###########################################################################
-        temp = self.sigmoid(X.dot(self.w)) + 0.5
-        y_pred = temp.astype(int)
+        temp = self.sigmoid(X.dot(self.ws))
+        y_pred = [np.argmax(temp[i]) for i in range(len(temp))]
         ###########################################################################
         #                           END OF YOUR CODE                              #
         ###########################################################################
@@ -142,5 +145,31 @@ class LogisticRegression(object):
         - num_iters: (integer) number of steps to take when optimizing
         - batch_size: (integer) number of training examples to use at each step.
         - verbose: (boolean) If true, print progress during optimization.
-
         """
+        num_train, dim = X.shape
+        if self.ws == None:
+            self.ws = np.empty(shape=(dim, 10))
+            for i in range(10):
+                self.ws[:, i] = 0.0001 * np.random.rand(dim)
+
+        loss_history = {}
+        # 训练十个二分类器
+        for i in range(10):
+            loss_history[i] = []
+            for it in range(num_iters):
+
+                batch_index = np.random.choice(num_train, batch_size, False)
+                X_batch = X[batch_index]
+                y_batch = y[batch_index]
+                # 每一个分类器中，标签正确的设置为1，错误的设置为0
+                y_batch = np.array(y_batch == i).astype(int)
+                loss, grad = self.loss(X_batch, y_batch, i)
+                # 当loss下降到一定程度时，将学习率降低
+                if loss < 0.2:
+                    learning_rate = 1e-7
+                loss_history[i].append(loss)
+                self.ws[:, i] = self.ws[:, i] - learning_rate * (grad + (0.005 * self.ws[:, i]) / len(y_batch))
+                if verbose and it % 2000 == 0:
+                    print('class %d iteration %d / %d: loss %f' % (i, it, num_iters, loss))
+
+        return loss_history

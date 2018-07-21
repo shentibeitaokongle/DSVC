@@ -26,7 +26,7 @@
 * feedforward neural network architectures       
 * non-linear function   
 * rectified linear unit(ReLU)     
-* units that are not in the input or output layer are conventionally called hidden units      
+* units that are not in the input or output layer are conventionally called hidden units        
 * local minima   
 * saddle points where the gradient is zero       
 * CIFAR introduced unsupervised learning procedures that could   
@@ -37,7 +37,26 @@
 
 ### Convolutional neural networks      
 
-* 
+* local connections(局部连接)      
+* shared weights(权值共享)          
+* pooling(池化)    
+* the use of many layers     
+* units in a convolutional layer are organized in feature maps    
+* filter bank   
+* local motif(局部特征)     
+* the role of the convolutional layer is to detect local conjunctions of features from the previous layer    
+* the role of the pooling layer is to merge semantically similar features into one      
+* hierarchies(层级)    
+* neocognitron(神经认知)     
+* time-delay neural net    
+
+
+### Image understanding with deep convolutional networks      
+
+* segmentation and recognition       
+* ImageNet competition    
+
+
 
 
 
