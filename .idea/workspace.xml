@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b43d281c-5654-4946-a50e-adc1c7b022c3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment3/homework/DSVC/classifiers/logistic_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/assignment3/homework/DSVC/classifiers/logistic_regression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignment3/homework/logistic_regression.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/assignment3/homework/logistic_regression.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignment1/Deeplearning Review.md" beforeDir="false" afterPath="$PROJECT_DIR$/assignment1/Deeplearning Review.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,8 +17,8 @@
       <file leaf-file-name="logistic_regression.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/assignment3/homework/DSVC/classifiers/logistic_regression.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="515">
-              <caret line="172" column="27" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="27" />
+            <state relative-caret-position="384">
+              <caret line="40" column="33" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -188,6 +187,16 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/assignment3/homework/DSVC/classifiers/logistic_regression.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3784">
+          <caret line="172" column="27" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assignment3/homework/DSVC/classifiers/logistic_regression.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3080">
           <caret line="140" column="36" lean-forward="true" selection-start-line="140" selection-start-column="36" selection-end-line="140" selection-end-column="36" />
           <folding>
@@ -241,8 +250,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/assignment3/homework/DSVC/classifiers/logistic_regression.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="515">
-          <caret line="172" column="27" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="27" />
+        <state relative-caret-position="384">
+          <caret line="40" column="33" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
