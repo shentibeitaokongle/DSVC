@@ -1,8 +1,7 @@
 from __future__ import print_function
 
 import numpy as np
-from DSVC.classifiers.linear_svm import *
-from past.builtins import xrange
+from .linear_svm import *
 
 
 class LinearClassifier(object):
@@ -38,7 +37,7 @@ class LinearClassifier(object):
 
         # Run stochastic gradient descent to optimize W
         loss_history = []
-        for it in xrange(num_iters):
+        for it in range(num_iters):
 
             X_batch = None
             y_batch = None
@@ -54,7 +53,7 @@ class LinearClassifier(object):
             # Hint: Use np.random.choice to generate indices. Sampling with         #
             # replacement is faster than sampling without replacement.              #
             #########################################################################
-            ind = np.random.choice(num_train,batch_size)
+            ind = np.random.choice(num_train, batch_size)
             X_batch = X[ind]
             y_batch = y[ind]
             #########################################################################
@@ -76,7 +75,7 @@ class LinearClassifier(object):
             #                       END OF YOUR CODE                                #
             #########################################################################
 
-            if verbose and it % 100 == 0:
+            if verbose and it % 500 == 0:
                 print('iteration %d / %d: loss %f' % (it, num_iters, loss))
 
         return loss_history
@@ -101,7 +100,7 @@ class LinearClassifier(object):
         # Implement this method. Store the predicted labels in y_pred.            #
         ###########################################################################
         scores = X.dot(self.W)
-        y_pred = np.argmax(scores,axis = 1)
+        y_pred = np.argmax(scores, axis=1)
         ###########################################################################
         #                           END OF YOUR CODE                              #
         ###########################################################################
@@ -122,7 +121,7 @@ class LinearClassifier(object):
         - loss as a single float
         - gradient with respect to self.W; an array of the same shape as W
         """
-        pass
+        LinearSVM.loss(X_batch, y_batch, reg)
 
 
 class LinearSVM(LinearClassifier):
@@ -130,4 +129,3 @@ class LinearSVM(LinearClassifier):
 
     def loss(self, X_batch, y_batch, reg):
         return svm_loss_vectorized(self.W, X_batch, y_batch, reg)
-        
